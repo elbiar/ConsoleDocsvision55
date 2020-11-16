@@ -1,10 +1,8 @@
-﻿using System;
+﻿using DocsVision.BackOffice.ObjectModel;
+using DocsVision.BackOffice.ObjectModel.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using DocsVision.BackOffice.ObjectModel;
-using DocsVision.BackOffice.ObjectModel.Services;
-using DocsVision.Platform.ObjectManager;
-using DocsVision.Platform.ObjectModel;
 
 
 
@@ -28,7 +26,7 @@ namespace ConsoleDocsvision55.TestProcess
             DvConnection.ObjectContext.GetObject<Document>(cardId);
             Document document = DvConnection.ObjectContext.GetObject<Document>(cardId);
             var result = (((BaseCardSectionRow)document.GetSection(new Guid("{B13955FD-3202-44D1-92BD-6B0F6878385F}"))[0])["ВидДокумента"]);
-            var subKindDocument = (((BaseCardSectionRow)document.GetSection(new Guid("{B13955FD-3202-44D1-92BD-6B0F6878385F}"))[0]).GetGuid("ВидДокумента") );
+            var subKindDocument = (((BaseCardSectionRow)document.GetSection(new Guid("{B13955FD-3202-44D1-92BD-6B0F6878385F}"))[0]).GetGuid("ВидДокумента"));
             BaseUniversalItem item = DvConnection.ObjectContext.GetObject<BaseUniversalItem>(subKindDocument);
 
         }
@@ -38,7 +36,7 @@ namespace ConsoleDocsvision55.TestProcess
         {
             //DvConnection.ObjectContext.GetObject<Document>(cardId);
             Document document = DvConnection.ObjectContext.GetObject<Document>(cardId);
-            var cardKind= document.SystemInfo.CardKind;
+            var cardKind = document.SystemInfo.CardKind;
             var result = (((BaseCardSectionRow)document.GetSection(new Guid("{B13955FD-3202-44D1-92BD-6B0F6878385F}"))[0])["ВидДокумента"]);
             var subKindDocument = (((BaseCardSectionRow)document.GetSection(new Guid("{B13955FD-3202-44D1-92BD-6B0F6878385F}"))[0]).GetGuid("ВидДокумента"));
             BaseUniversalItem itemCard = DvConnection.ObjectContext.GetObject<BaseUniversalItem>(subKindDocument);
@@ -57,7 +55,7 @@ namespace ConsoleDocsvision55.TestProcess
             //Начальник БК
             IEnumerable<StaffEmployee> headDepartBk = GetEmployeesFromGroup("КЗ", "Начальник БК");
             //Начальник ОК(КЗ)
-             IEnumerable<StaffEmployee> headDepartOk = FindGroup("Договоры", "Начальник ОК(КЗ)");
+            IEnumerable<StaffEmployee> headDepartOk = FindGroup("Договоры", "Начальник ОК(КЗ)");
             //Начальник расчет. отдела(КЗ)   Начальник расчет. отдела(КЗ)
             IEnumerable<StaffEmployee> headDepartCalculate = GetEmployeesFromGroup("КЗ", "Начальник расчет. отдела(КЗ)");
 
@@ -65,24 +63,19 @@ namespace ConsoleDocsvision55.TestProcess
 
 
             //if == Внутренние Кз and Информа справоч and ВидДокумента='%Заявка%'
-            if ( dictionaryRequest.ContainsKey(itemCard.GetObjectId()))
+            if (dictionaryRequest.ContainsKey(itemCard.GetObjectId()))
             {
 
             }
         }
 
-        //Документ -> Заявка
-        private void GetDocumentAsRequest()
-        {
-
-        }
 
         //Получить сотрудников из группы
         private IEnumerable<StaffEmployee> GetEmployeesFromGroup(String parentGroupName, String groupName)
         {
             IStaffService staffService = DvConnection.ObjectContext.GetService<IStaffService>();
             var group = staffService.FindGroupByName(null, parentGroupName);
-            if (group == null )
+            if (group == null)
                 return null;
             var groupCurrent = staffService.FindGroupByName(group, groupName);
             if (groupCurrent == null)
@@ -97,8 +90,8 @@ namespace ConsoleDocsvision55.TestProcess
             IStaffService staffService = DvConnection.ObjectContext.GetService<IStaffService>();
             var group = staffService.FindGroupByName(null, "КЗ");
             if (group == null)
-                return null ;
-            var groupLevel=group.Groups.Where(s => s.Name == parentGroupName).FirstOrDefault();
+                return null;
+            var groupLevel = group.Groups.Where(s => s.Name == parentGroupName).FirstOrDefault();
             if (groupLevel == null)
                 return null;
             var groupCurrent = staffService.FindGroupByName(groupLevel, groupName);
@@ -108,40 +101,39 @@ namespace ConsoleDocsvision55.TestProcess
 
         public void Test()
         {
-            //v value{15fd1862-a815-42c1-9ed9-b5f3590ef0a9} DVPrincipal Иванов
-            //v value{ 4eec9347 - 4048 - 4475 - 9263 - 1aa8a298f391}
-            //v value{e1509ec6-67b3-46c3-9699-c57c14ee7a70} DVPrincipal
 
             IStaffService staffService = DvConnection.ObjectContext.GetService<IStaffService>();
-            List<StaffEmployee> list = new List<StaffEmployee>();
-            list.Add(staffService.Get(new Guid("15fd1862-a815-42c1-9ed9-b5f3590ef0a9") ));
-            list.Add(staffService.Get(new Guid("4eec9347-4048-4475-9263-1aa8a298f391") ));
-            list.Add(staffService.Get(new Guid("e1509ec6-67b3-46c3-9699-c57c14ee7a70") ));
+            List<StaffEmployee> list = new List<StaffEmployee>
+            {
+                staffService.Get(new Guid("15fd1862-a815-42c1-9ed9-b5f3590ef0a9")),
+                staffService.Get(new Guid("4eec9347-4048-4475-9263-1aa8a298f391")),
+                staffService.Get(new Guid("e1509ec6-67b3-46c3-9699-c57c14ee7a70"))
+            };
 
             var adm = staffService.Get(new Guid("4eec9347-4048-4475-9263-1aa8a298f391"));
             var index = list.IndexOf(adm);
             if (list.Count == 0 || index == list.Count - 1)
                 return;
 
-            if( index != list.Count - 1)
+            if (index != list.Count - 1)
             {
                 list.Remove(adm);
             }
-            list.Insert(list.Count , adm);
+            list.Insert(list.Count, adm);
 
 
         }
 
 
-        public void testFindGroup(String parentGroupName, String groupName)
+        public void TestFindGroup(String parentGroupName, String groupName)
         {
             IStaffService staffService = DvConnection.ObjectContext.GetService<IStaffService>();
             var group = staffService.FindGroupByName(null, "parentGroupName");
             if (group == null)
-                return ;
+                return;
             var groupLevel = group.Groups.Where(s => s.Name == parentGroupName).FirstOrDefault();
             if (groupLevel == null)
-                return ;
+                return;
             var groupCurrent = staffService.FindGroupByName(groupLevel, groupName);
             IEnumerable<StaffEmployee> employees = staffService.GetGroupEmployees(groupCurrent, true, true, true);
 

@@ -27,7 +27,7 @@ namespace ConsoleDocsvision55
                 Bpocess process = new Bpocess();
                 //process.NeedApproval(idCard);
                 //process.Test();
-                process.testFindGroup("Договоры", "Начальник ОК(КЗ)");
+                process.TestFindGroup("Договоры", "Начальник ОК(КЗ)");
                 #region
                 //    Dictionary<int, int> Test1 = new Dictionary<int, int>();
                 //    Test1.Add(1, 0);
